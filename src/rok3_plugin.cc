@@ -425,26 +425,51 @@ VectorXd rotToEuler(MatrixXd rot_Mat){   //Euler ZYX
 
 //preparing robotcontrol pratice
 void Practice(){
-    MatrixXd TI0(4,4),T3E(4,4),T01(4,4),T12(4,4),T23(4,4),TIE(4,4);
-    Vector3d q={30,30,30};
-    q=q*PI/180;
-    
-    TI0=getTransformI0();
+    MatrixXd TI0(4,4),T6E(4,4),T01(4,4),T12(4,4),T23(4,4),T34(4,4),T45(4,4),T56(4,4),TIE(4,4);
+    Vector3d position,euler;
+    MatrixXd matrix(3,3);
+    VectorXd q(6);
+    q(0) = 10;
+    q(1) = 20;
+    q(2) = 30;
+    q(3) = 40;
+    q(4) = 50;
+    q(5) = 60; 
  
-    T3E=getTransform3E();
-    T01=jointToTransform01(q);
-    T12=jointToTransform12(q);
-    T23=jointToTransform23(q);
+    q = q*PI/180;
+
+    TI0 = getTransformI0();
+    T6E = getTransform6E();
+    T01 = jointToTransform01(q);
+    T12 = jointToTransform12(q);
+    T23 = jointToTransform23(q);   
+    T34 = jointToTransform34(q);  
+    T45 = jointToTransform45(q);  
+    T56 = jointToTransform56(q);  
+
+    TIE = TI0*T01*T12*T23*T34*T45*T56*T6E;
     
-    TIE=TI0*T01*T12*T23*T3E;
+    position = jointToPosition(q);
+    matrix = jointToRotMat(q);
+    euler = rotToEuler(matrix);
     
     std::cout <<"Hello World"<< std::endl;
     std::cout <<"TI0: "<<TI0<< std::endl;
     std::cout <<"T01: "<<T01<< std::endl;
     std::cout <<"T12: "<<T12<< std::endl;
     std::cout <<"T23: "<<T23<< std::endl;
-    std::cout <<"T3E: "<<T3E<< std::endl;
-    std::cout <<"TIE: "<<TIE<< std::endl;
+    std::cout <<"T34: "<<T34<< std::endl;
+    std::cout <<"T45: "<<T45<< std::endl;
+    std::cout <<"T56: "<<T56<< std::endl;
+    std::cout <<"T6E: "<<T6E<< std::endl;
+       
+    std::cout<<"TIE: "<<std::endl<<TIE<<std::endl;
+    
+    std::cout<<"Position: "<<std::endl<<position<<std::endl;
+    std::cout<<"matrix: "<<std::endl<<matrix<<std::endl;
+    std::cout<<"Euler: "<<std::endl<<euler*180/PI<<std::endl;
+    
+
     
 }
 
